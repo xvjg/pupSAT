@@ -1,5 +1,28 @@
 # GPU acceleration for SAT solving
-## Vikrant Gajria, vgajria@purdue.edu
+## Vikrant Gajria
+
+Table of contents
+=================
+
+<!--ts-->
+   * [Introduction](#introduction)
+   * [Algorithms](#algorithms)
+      * [DPLL algorithm](#dpll-algorithm)
+      * [Bottleneck](#bottleneck)
+   * [Approach to solving bottleneck](#approach-to-solving-bottleneck)
+      * [Unit propagation loop](#unit-propagation-loop)
+      * [Parallel algorithm](#parallel-algorithm)
+      * [Implementation](#implementation)
+         * [Assumptions](#assumptions)
+         * [GPU-CPU data structures](#gpu-cpu-data-structures)
+            * [Formula matrix](#formula-matrix)
+            * [Index structure](#index-structure)
+            * [Decisions trail](#decisions-trail)
+         * [Parallel work](#parallel-work)
+<!--te-->
+
+<!------------------------------------------------------------------------------------------------- Section -->
+
 
 <!-- Section -->
 # Introduction
