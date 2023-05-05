@@ -92,7 +92,9 @@ For every unprocessed decision, threads access the list of clauses that contain 
 
 Once the local unit clauses are calculated, each thread has zero or one decision (that is, each thread can choose to produce a decision). These decisions are placed into a shared memory array. A chosen thread serially pushes the decisions onto the stack. If a conflicting decision was already present on the stack, then the unit propagation procedure returns with conflict status.
 
-#### Optimization: Parallel push to the stack.
+#### Optimization: Parallel push to the stack with coalesced writes
+
+![push](/docs/pupSAT-reduction.drawio.png)
 
 An optimized approach is to assign locations for every thread to place their local decisions onto the stack. The stack is implemented with an array. The threads decide cumulative positions to place their data and write to the stack in coaslesced fashion. If a thread is assigned a location that is beyond the size of the decisions stack (size: $V$), then it follows that there must exist a conflicting decision on the stack. This is because we cannot decide values for more than $V$ variables.
 
@@ -105,16 +107,21 @@ The kernel dispatch dimensions will depend on the distribution of variables in c
 Currently this algorithm only works with 1 block.
 
 <!------------------------------------------------------------------------------------------------- Section -->
-# Heuristics and learning-driven search
+# Heuristics, learning-driven search, massively parallel solvers
+
+This work is intended to be added to other massively parallel SAT solvers that parallelize state space search.
+Examples of such solvers include ManySAT and HoardeSAT that generate several random assignments and task workers
+to explore the state space search, they incorporate strategies such as work-stealing and clause sharing. There are some very simple parallel solvers that perform great, such as PPfolio solver that is described as "it’s probably the laziest and most stupid solver ever written, which does not even parse the CNF and knows nothing about the clauses". Simple ideas work pretty well in SAT solvers. See: https://www.cril.univ-artois.fr/~roussel/ppfolio/ 
 
 <!-- Subsection -->
-## CDCL algorithm
+## Non-chronological back-tracking and conflict learning
+
+Conflict-Driven Clause Learning (CDCL) is a modification to DPLL, wherein the algorithm backtracks multiple levels up the search tree and adds new clauses to learn from its previous mistakes. The base algorithm is pretty much the same, in that it still uses unit propagation. This project's algorithm can be implemented in CDCL solvers as well to take advantage of heuristics and non-chronological backtracking. I found it a difficult to implement in that there's a lot of memory copies between host and device, therefore it wasn't possible for me to think of a good way to minimize memory transfers.  
 
 <!-- Subsection -->
 ## Implementing an implication graph
 
-<!-- Subsection -->
-## Heuristics
+Implication graph for CDCL is a graph that is used for learning from mistakes. It is a acyclic directed graph. It can be implemented using the DecisionStack structure mentioned in this project.
 
 <!------------------------------------------------------------------------------------------------- Section -->
 # Conclusion
