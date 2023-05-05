@@ -43,7 +43,7 @@ A basic unit propagation loop is explained below:
 
 Observe that the task of analyzing every clause does not depend on any other clause's analysis. A separate thread can anlyze a set of clauses and come up with its local assignment, which then can be combined with local assignments of other threads and checked in the end for conflicting assignments. An assignment is said to have a conflict if a variable $v$ appears as both postive $v$ and negative $\not v$ in the assignment. 
 
-![TG](/docs/pupSAT-Task%20Graph.drawio.png)
+![TG](/docs/pupSAT-TaskGraph.drawio.png)
 
 ## Parallel algorithm
 
